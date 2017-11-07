@@ -11,7 +11,7 @@ class Zarinpal
     private $driver;
     private $Authority;
 
-    public function __construct($merchantID, DriverInterface $driver = null)
+    public function __construct ($merchantID, DriverInterface $driver = null)
     {
         if (is_null($driver)) {
             $driver = new RestDriver();
@@ -32,12 +32,12 @@ class Zarinpal
      *
      * @return array|@redirect
      */
-    public function request($callbackURL, $Amount, $Description, $Email = null, $Mobile = null)
+    public function request ($callbackURL, $Amount, $Description, $Email = null, $Mobile = null)
     {
         $inputs = [
-            'MerchantID'  => $this->merchantID,
+            'MerchantID' => $this->merchantID,
             'CallbackURL' => $callbackURL,
-            'Amount'      => $Amount,
+            'Amount' => $Amount,
             'Description' => $Description,
         ];
         if (!empty($Email)) {
@@ -47,6 +47,35 @@ class Zarinpal
             $inputs['Mobile'] = $Mobile;
         }
         $auth = $this->driver->request($inputs);
+        if (empty($auth['Authority'])) {
+            $auth['Authority'] = null;
+        }
+        $this->Authority = $auth['Authority'];
+
+        return $auth;
+    }
+
+
+    /**
+     * send request for money to zarinpal with extra
+     * and redirect if there was no error.
+     *
+     * @param string $callbackURL
+     * @param string $Amount
+     * @param string $Description
+     * @param array $additionalData‬‬
+     * @return array @redirect
+     */
+    public function requestWithExtra ($callbackURL, $Amount, $Description, array $additionalData‬‬)
+    {
+        $inputs = [
+            'MerchantID' => $this->merchantID,
+            'CallbackURL' => $callbackURL,
+            'Amount' => $Amount,
+            'Description' => $Description,
+            'AdditionalData' => $additionalData‬‬,
+        ];
+        $auth = $this->driver->requestWithExtra($inputs);
         if (empty($auth['Authority'])) {
             $auth['Authority'] = null;
         }
@@ -65,13 +94,38 @@ class Zarinpal
      *
      * @return array
      */
-    public function verify($status, $amount, $authority)
+    public function verifyWithExtra ($status, $amount, $authority)
     {
         if ($status == 'OK') {
             $inputs = [
                 'MerchantID' => $this->merchantID,
-                'Authority'  => $authority,
-                'Amount'     => $amount,
+                'Authority' => $authority,
+                'Amount' => $amount,
+            ];
+
+            return $this->driver->verifyWithExtra($inputs);
+        } else {
+            return ['Status' => 'canceled'];
+        }
+    }
+
+    /**
+     * verify that the bill is paid or not
+     * by checking authority, amount and status.
+     *
+     * @param $status
+     * @param $amount
+     * @param $authority
+     *
+     * @return array
+     */
+    public function verify ($status, $amount, $authority)
+    {
+        if ($status == 'OK') {
+            $inputs = [
+                'MerchantID' => $this->merchantID,
+                'Authority' => $authority,
+                'Amount' => $amount,
             ];
 
             return $this->driver->verify($inputs);
@@ -80,16 +134,16 @@ class Zarinpal
         }
     }
 
-    public function redirect()
+    public function redirect ()
     {
-        header('Location: https://www.zarinpal.com/pg/StartPay/'.$this->Authority);
+        header('Location: https://www.zarinpal.com/pg/StartPay/' . $this->Authority);
         die;
     }
 
     /**
      * @return DriverInterface
      */
-    public function getDriver()
+    public function getDriver ()
     {
         return $this->driver;
     }

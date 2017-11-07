@@ -148,7 +148,6 @@ class RestDriver implements DriverInterface
 
     /**
      * @param mixed $baseUrl
-     *
      * @return void
      */
     public function setAddress($baseUrl)
