@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/RTLer/zarinpal-composer-library/badge.svg?branch=master)](https://coveralls.io/github/RTLer/zarinpal-composer-library?branch=master)
 
 
-transaction request library for zarinpal
+transaction request library for zarinpal with shared pay off
 
 ## usage
 ### installation
