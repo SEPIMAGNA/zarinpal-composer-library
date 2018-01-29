@@ -63,10 +63,10 @@ class Zarinpal
      * @param string $callbackURL
      * @param string $Amount
      * @param string $Description
-     * @param array $additionalData‬‬
+     * @param string $additionalData‬‬
      * @return array @redirect
      */
-    public function requestWithExtra ($callbackURL, $Amount, $Description, array $additionalData‬‬)
+    public function requestWithExtra ($callbackURL, $Amount, $Description, $additionalData‬‬)
     {
         $inputs = [
             'MerchantID' => $this->merchantID,
