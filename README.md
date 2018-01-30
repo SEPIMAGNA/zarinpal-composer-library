@@ -67,4 +67,12 @@ use Zarinpal\Laravel\Facade\Zarinpal;
 Zarinpal::request("example.com/testVerify.php",1000,'testing');
 Zarinpal::verify('OK',1000,$answer['Authority']);
 ```
-
+## shared payoff
+If you are using shared payoff portal..:
+```php
+$test = new Zarinpal('XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');
+...
+$additionalData = json_encode($additionalData);
+$test->requestWithExtra("example.com/testVerify.php",1000,'testing',$additionalData);
+$test->verifyWithExtra($request['Status'],1000, $answer['Authority']);
+```
